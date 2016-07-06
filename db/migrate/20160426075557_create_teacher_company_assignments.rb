@@ -1,8 +1,8 @@
-class CreateAssignments < ActiveRecord::Migration
+class CreateTeacherCompanyAssignments < ActiveRecord::Migration
   def change
     create_table :assignments do |t|
       t.reference :user
-      t.reference :role
+      t.reference :company
 
       t.timestamps null: false
     end

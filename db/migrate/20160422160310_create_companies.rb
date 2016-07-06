@@ -4,10 +4,10 @@ class CreateCompanies < ActiveRecord::Migration
       t.string :name
       t.text :description
       t.string :address
-      t.string :owner
       t.string :email
       t.integer :phone
       t.string :website
+      t.reference :user, index: true, foreign_key: true
 
       t.timestamps null: false
     end

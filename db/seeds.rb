@@ -6,6 +6,6 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-%w(admin moderator teacher registered banned).each do |role|
+%w(admin moderator teacher company registered banned).each do |role|
   Role.find_or_create_by(name: role)
 end
