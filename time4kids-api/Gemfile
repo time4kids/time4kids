@@ -36,8 +36,9 @@ gem 'unicorn'
 
 # Easy file attachment management for ActiveRecord
 gem 'paperclip'
-
 gem 'responders'
+gem 'dry-validation'
+gem 'kleisli'
 
 # gem 'active_model_serializers'
 # Use Capistrano for deployment
