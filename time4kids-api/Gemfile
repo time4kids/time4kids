@@ -29,7 +29,7 @@ gem 'simple_form'
 gem 'slim-rails'
 
 gem 'devise'
-gem 'simple_token_authentication'
+gem 'jwt'
 gem 'i18n'
 # Use Unicorn as the app server
 gem 'unicorn'
