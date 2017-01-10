@@ -13,11 +13,11 @@ group :assets do
   # Use jquery as the JavaScript library
   gem 'jquery-rails'
   # Use SCSS for stylesheets
-  gem 'sass-rails', '~> 5.0'
+  gem 'sass-rails', '>= 3.2'
   # Use Uglifier as compressor for JavaScript assets
   gem 'uglifier', '>= 1.3.0'
 
-  gem 'bootstrap-sass'
+  gem 'bootstrap-sass', '~> 3.3.6'
 end
 
 # Use ActiveModel has_secure_password
@@ -35,7 +35,9 @@ gem 'unicorn'
 # Easy file attachment management for ActiveRecord
 gem 'paperclip'
 
+gem 'responders'
 
+# gem 'active_model_serializers'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
