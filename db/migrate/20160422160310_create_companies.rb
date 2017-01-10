@@ -7,7 +7,7 @@ class CreateCompanies < ActiveRecord::Migration
       t.string :email
       t.integer :phone
       t.string :website
-      t.reference :user, index: true, foreign_key: true
+      t.references :user, index: true, foreign_key: true
 
       t.timestamps null: false
     end

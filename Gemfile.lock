@@ -269,7 +269,7 @@ PLATFORMS
 
 DEPENDENCIES
   better_errors
-  bootstrap-sass
+  bootstrap-sass (~> 3.3.6)
   capybara
   coffee-rails (~> 4.1.0)
   database_cleaner
@@ -290,7 +290,7 @@ DEPENDENCIES
   rails_layout
   rspec-rails
   rubocop
-  sass-rails (~> 5.0)
+  sass-rails (>= 3.2)
   selenium-webdriver
   simple_form
   slim-rails
