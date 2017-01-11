@@ -20,4 +20,28 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  exceptions:
+    auth:
+      invalid_credentials:
+        title: 'Authentication failed'
+        detail: 'Provided email or password is not correct, please try again'
+        status: 'unauthorized'
+      email_is_invalid:
+        title: 'Authentication: Email Address is invalid'
+        detail: '%{invalid_email} is not a valid email address.'
+        status: 'bad_request'
+    request:
+      unsupported_media_type:
+        title: 'Invalid Content-Type header'
+        detail: 'Content-Type header set to %{valid_media_type} required'
+        status: unsupported_media_type
+      invalid_params:
+        title: 'Invalid params format'
+        detail: Unable to process the contained instructions
+        status: unprocessable_entity
+
+    permissions:
+      access_denied:
+        title: 'Permissions: Access Denied'
+        detail: 'The Current User does not have permission to %{action} a %{subject_class_name} with id: %{subject_id}.'
+        status: 'unauthorized'

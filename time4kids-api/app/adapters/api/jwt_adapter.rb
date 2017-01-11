@@ -8,6 +8,7 @@ module API
     class Error < ::StandardError; end
     # Raised when there's a problem with a token. Makes the controller return 401.
     class InvalidTokenError < Error; end
+    class ExpiredTokenError < Error; end
 
     ALGORITHM = 'HS256'
     private_constant :ALGORITHM
@@ -20,7 +21,7 @@ module API
       raise ArgumentError if user_id.blank?
 
       payload = {
-        exp: 1.month.from_now.utc.to_i,
+        exp: 1.week.from_now.utc.to_i,
         iat: Time.now.utc.to_i,
         sub: user_id.to_s,
       }
@@ -39,7 +40,7 @@ module API
         payload, _ = JWT.decode token, Time4kids::Env.fetch('JWT_SECRET'), verify_signature, options
       rescue JWT::ExpiredSignature
         Rails.logger.info 'JWTAdapter: Expired JWT'
-        raise InvalidTokenError
+        raise ExpiredTokenError
       rescue JWT::IncorrectAlgorithm => e
         Rails.logger.error 'JWTAdapter: Incorrect algorithm'
         raise InvalidTokenError
