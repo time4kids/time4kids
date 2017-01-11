@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
-  devise_for :users, only: []
-  # scope "/admin" do
-  #   resources :users
-  # end
+  devise_for :users, skip: [:sessions, :registrations, :passwords]
 
   namespace :api, defaults: { format: :json } do
     scope module: :v1, path: 'v1' do
-      resources :authentication, only: [:create]
+      devise_scope :user do
+        post '/authentication' => 'authentication#create'
+        get '/failure' => 'authentication#failure'
+      end
     end
   end
 
