@@ -7,6 +7,9 @@ Rails.application.routes.draw do
         post '/authentication' => 'authentication#create'
         get '/failure' => 'authentication#failure'
       end
+
+      # catch missing routes and return 404
+      match "*path", to: -> (env) { [404, {}, ['{"error": "not_found"}']] }, via: :all
     end
   end
 

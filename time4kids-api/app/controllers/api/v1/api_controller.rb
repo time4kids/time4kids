@@ -1,7 +1,8 @@
 module API
   module V1
     class ApiController < ActionController::API
-      include API::ErrorHandler
+      include API::ErrorsHandler
+
       respond_to :json
 
       before_action :validate_media_type

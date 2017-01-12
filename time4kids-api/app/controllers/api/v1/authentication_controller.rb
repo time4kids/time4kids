@@ -1,9 +1,11 @@
 module API
   module V1
     class AuthenticationController < ::Devise::SessionsController
-      include API::ErrorHandler
+      include API::ErrorsHandler
+
       # Disable CSRF protection
       skip_before_action :verify_authenticity_token
+
       respond_to :json
 
       # POST /api/v1/authentication
