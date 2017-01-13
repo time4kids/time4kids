@@ -2,6 +2,8 @@ module API
   module V1
     class ApiController < ActionController::API
       include API::ErrorsHandler
+      include Knock::Authenticable
+      undef_method :current_user
 
       respond_to :json
 

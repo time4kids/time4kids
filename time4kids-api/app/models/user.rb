@@ -8,6 +8,13 @@ class User < ActiveRecord::Base
   has_many :roles, through: :assignments
   before_create :set_default_role
 
+  alias authenticate valid_password?
+
+
+def self.from_token_payload(payload)
+  self.find payload['sub']
+end
+
   private
 
   def set_default_role

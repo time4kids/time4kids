@@ -39,12 +39,6 @@ module API
           render_json_api header_result, status: :unauthorized
           return
         end
-
-        token_result = API::JWTSchema.call(token: token_content.value)
-        if token_result.failure?
-          Rails.logger.error "JWT error: #{token_result.output.inspect}"
-          render_json_api token_result, status: :unauthorized
-        end
       end
 
       # Check if Accept header is properly formatted

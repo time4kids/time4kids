@@ -21,6 +21,7 @@ group :assets do
   gem 'bootstrap-sass', '~> 3.3.6'
 end
 
+gem 'dry-validation'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -37,8 +38,10 @@ gem 'unicorn'
 # Easy file attachment management for ActiveRecord
 gem 'paperclip'
 gem 'responders'
-gem 'dry-validation'
+
 gem 'kleisli'
+gem 'knock'
+gem 'rack-cors', require: 'rack/cors'
 
 # gem 'active_model_serializers'
 # Use Capistrano for deployment
@@ -69,7 +72,7 @@ group :test do
   gem 'shoulda-matchers', '~> 3.0', require: false
   gem 'database_cleaner', '~> 1.5'
   gem 'faker', '~> 1.6.1'
-  gem 'simplecov', :require => false
+  gem 'simplecov', require: false
   gem 'capybara'
   gem 'poltergeist'
 end
