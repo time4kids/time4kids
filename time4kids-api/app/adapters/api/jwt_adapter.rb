@@ -11,7 +11,9 @@ module API
     class ExpiredTokenError < Error; end
 
     ALGORITHM = 'HS256'
-    private_constant :ALGORITHM
+    HMAC_SECRET = Time4kids::Env.fetch('JWT_SECRET')
+
+    private_constant :ALGORITHM, :HMAC_SECRET
 
     # Encodes payload into JWT token
     #
@@ -19,13 +21,17 @@ module API
     # @returns [String] JWT token
     def encode(user_id:)
       raise ArgumentError if user_id.blank?
-
+      iat = Time.now.utc.to_i
+      jti_raw = [HMAC_SECRET, iat].join(':').to_s
       payload = {
         exp: 1.week.from_now.utc.to_i,
-        iat: Time.now.utc.to_i,
+        iat: iat,
         sub: user_id.to_s,
+        iss: 'Time4kids',
+        jti: Digest::MD5.hexdigest(jti_raw)
       }
-      JWT.encode payload, Time4kids::Env.fetch('JWT_SECRET'), ALGORITHM
+
+      JWT.encode payload, HMAC_SECRET, ALGORITHM
     end
 
     # Decodes JWT token, verifies it and extracts its payload

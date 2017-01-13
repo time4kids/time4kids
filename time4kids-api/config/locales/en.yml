@@ -39,6 +39,11 @@ en:
         title: 'Invalid params format'
         detail: Unable to process the contained instructions
         status: unprocessable_entity
+      invalid_token:
+        title: Not Authenticated
+        detail: 'Your token or authorization header is invalid'
+        status: unauthorized
+
 
     permissions:
       access_denied:

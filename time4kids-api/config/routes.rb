@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     scope module: :v1, path: 'v1' do
       devise_scope :user do
-        post '/authentication' => 'authentication#create'
-        get '/failure' => 'authentication#failure'
+        resources :authentications, only: [:create]
+        resources :registrations, only: [:create, :update]
       end
 
       # catch missing routes and return 404

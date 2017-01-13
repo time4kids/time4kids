@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe API::V1::AuthenticationController, type: :controller do
+RSpec.describe API::V1::AuthenticationsController, type: :controller do
 
   before do
     @request.headers['Content-Type'] = 'application/vnd.time4kids+json,application/json'

@@ -11,6 +11,6 @@ class User < ActiveRecord::Base
   private
 
   def set_default_role
-    self.roles ||= Role.find_by_name('registered')
+    self.roles ||= Role.find_by_name('registered') unless role_id
   end
 end

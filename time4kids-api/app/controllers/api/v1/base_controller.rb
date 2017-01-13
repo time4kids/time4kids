@@ -36,14 +36,13 @@ module API
         header_result = API::AuthorizationHeaderSchema.call(content: authorization_content)
         if header_result.failure?
           Rails.logger.error "Authorization header error: #{header_result.output.inspect}"
-          render_json_api header_result, status: :unauthorized
-          return
+          raise API::Exception.new('auth.invalid_token', code: 401)
         end
 
         token_result = API::JWTSchema.call(token: token_content.value)
         if token_result.failure?
           Rails.logger.error "JWT error: #{token_result.output.inspect}"
-          render_json_api token_result, status: :unauthorized
+          raise API::Exception.new('auth.invalid_token', code: 401)
         end
       end
 
@@ -52,7 +51,8 @@ module API
         media_types
       rescue HTTP::Accept::ParseError
         msg = 'Accept header malformed'
-        render_json_api_error title: msg, status: :bad_request
+
+        render json: msg, status: :bad_request
       end
 
 
