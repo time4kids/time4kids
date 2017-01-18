@@ -280,19 +280,19 @@ module Devise
 
       def authenticate!
         return fail! unless claims
-        return fail! unless claims.key?('user_id')
+        return fail! unless claims.key?('sub')
 
-        success! User.find_by_id claims['user_id']
+        success! User.find_by_id claims['sub']
       end
 
       protected ######################## PROTECTED #############################
 
       def claims
-        strategy, token = request.headers['Authorization'].split(' ')
+        strategy, token = request.headers['Authorization'].split
 
-        return nil unless (strategy || '').casecmp('bearer').zero?
+        return unless (strategy || '').casecmp('bearer').zero?
 
-        API::JWTAdapter.decode(token) rescue nil
+        API::JWTAdapter.new.decode(token) rescue nil
       end
     end
   end

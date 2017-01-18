@@ -58,7 +58,7 @@ module API
         raise InvalidTokenError
       end
 
-      payload.fetch('sub')
+      payload
     end
 
     private

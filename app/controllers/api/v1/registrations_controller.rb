@@ -1,7 +1,7 @@
 module API
   module V1
     class RegistrationsController < ::Devise::RegistrationsController
-      # skip_before_action :verify_authenticity_token, only: [:create]
+      skip_before_action :verify_authenticity_token
 
       respond_to :json
 
@@ -18,11 +18,9 @@ module API
       end
 
       def update
-        binding.pry
         super do |resource|
-          binding.pry
           if resource.valid?
-            render :nothing, status: 204
+            render nothing: true, status: 204
           else
             render json: resource.errors, status: 422
           end
