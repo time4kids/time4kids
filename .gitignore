@@ -9,54 +9,11 @@
 
 # Ignore all logfiles and tempfiles.
 /log/*
+/tmp/*
 !/log/.keep
-/tmp
-\*~
-# Emacs temporary files
-\#*\#
+!/tmp/.keep
 
-# Bundler artifacts
-.bundle
-bundler_stubs/
-vendor/bundle
-
-# Database configuration, files
-config/database.yml
-.env
-
-# Asset generation artifacts
-.sass-cache/
-
-# Ruby / Rails operational files
-.rbenv-version
-.powrc
-log/*
-tmp/**/*
-tmp/restart.txt
-.ruby-gemset
-.rbenv-gemsets
-
-# MacOSX shit
-.DS_Store
-
-# Filez
-tags
-
-# Anything temporary
-*.old
-*.swp
-*.swo
-dump.rdb
-
-.tags_swap
-
-# RubyMine cache
-.idea
-
-# simplecov report
-coverage
-
-# RSpec failed examples tracking
-spec/examples.txt
+/node_modules
+/yarn-error.log
 
 .byebug_history
