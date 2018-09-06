@@ -1,14 +1,16 @@
-class CreateCourses < ActiveRecord::Migration
+class CreateCourses < ActiveRecord::Migration[5.1]
   def change
     create_table :courses do |t|
       t.string :title
       t.text :description
-      t.references :user, index: true, foreign_key: true, null: false
-      t.references :company, index: true, foreign_key: true, null: true
-      t.integer :start_age
-      t.integer :end_age
-      t.date :start_date
+      t.references :school, index: true, foreign_key: true, null: true
+      t.integer :level, null: false
+      t.integer :age, null: false
+      t.integer :duration
+      t.date :start_date, null: false
       t.date :end_date
+      t.timestamps :start_time, null: false
+      t.string :language
 
       t.timestamps null: false
     end
