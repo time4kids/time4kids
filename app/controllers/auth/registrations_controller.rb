@@ -8,7 +8,7 @@ module Auth
 
     def sign_up_params
       res = fix_nested_attributes(params.require(:user).permit(
-        :email, :password, :first_name, :last_name, :role)
+        :full_name, :email, :password)
       res
     end
   end
