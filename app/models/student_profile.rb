@@ -1,6 +1,6 @@
-class StudentProfile < ApplicationRecord
-  has_one :user, as: :profile
-  has_one :address
+# frozen_string_literal: true
 
-  accepts_nested_attributes_for :address
+class StudentProfile < ApplicationRecord
+  has_one :user, as: :profile, dependent: :delete
+  has_one :address
 end

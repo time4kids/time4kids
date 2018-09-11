@@ -1,5 +1,5 @@
 class AddProfileToUsers < ActiveRecord::Migration[5.2]
   def change
-    add_reference :users, :profile, polymorfic: true, foreign_key: true
+    add_reference :users, :profile, polymorphic: true, index: true
   end
 end

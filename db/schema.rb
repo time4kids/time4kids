@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,80 +10,82 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160706145451) do
+ActiveRecord::Schema.define(version: 2018_09_17_150449) do
 
-  create_table "assignments", force: :cascade do |t|
-    t.integer  "user_id",    limit: 4
-    t.integer  "company_id", limit: 4
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "country", null: false
+    t.string "region"
+    t.string "city", null: false
+    t.string "street", null: false
+    t.string "number"
+    t.integer "postal_code"
+    t.float "lat"
+    t.float "long"
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string   "name",        limit: 255
-    t.text     "description", limit: 65535
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "companies", force: :cascade do |t|
-    t.string   "name",        limit: 255
-    t.text     "description", limit: 65535
-    t.string   "address",     limit: 255
-    t.string   "email",       limit: 255
-    t.integer  "phone",       limit: 4
-    t.string   "website",     limit: 255
-    t.integer  "user_id",     limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+  create_table "jwt_blacklist", force: :cascade do |t|
+    t.string "jti", null: false
+    t.datetime "exp", null: false
+    t.index ["jti"], name: "index_jwt_blacklist_on_jti"
   end
 
-  add_index "companies", ["user_id"], name: "index_companies_on_user_id", using: :btree
-
-  create_table "courses", force: :cascade do |t|
-    t.string   "title",       limit: 255
-    t.text     "description", limit: 65535
-    t.integer  "user_id",     limit: 4,     null: false
-    t.integer  "company_id",  limit: 4
-    t.integer  "start_age",   limit: 4
-    t.integer  "end_age",     limit: 4
-    t.date     "start_date"
-    t.date     "end_date"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+  create_table "school_profiles", force: :cascade do |t|
+    t.string "name"
+    t.string "phone"
+    t.string "website"
+    t.text "description"
+    t.bigint "address_id"
+    t.index ["address_id"], name: "index_school_profiles_on_address_id"
   end
 
-  add_index "courses", ["company_id"], name: "index_courses_on_company_id", using: :btree
-  add_index "courses", ["user_id"], name: "index_courses_on_user_id", using: :btree
-
-  create_table "roles", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+  create_table "student_profiles", force: :cascade do |t|
+    t.string "phone"
+    t.bigint "address_id"
+    t.integer "age"
+    t.index ["address_id"], name: "index_student_profiles_on_address_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  limit: 255, default: "", null: false
-    t.string   "encrypted_password",     limit: 255, default: "", null: false
-    t.string   "reset_password_token",   limit: 255
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "gender"
+    t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
+    t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",     limit: 255
-    t.string   "last_sign_in_ip",        limit: 255
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
-    t.integer  "role_id",                limit: 4
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
+    t.datetime "locked_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "role", default: 0, null: false
+    t.string "avatar_file_name"
+    t.string "avatar_content_type"
+    t.bigint "avatar_file_size"
+    t.datetime "avatar_updated_at"
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.boolean "is_active", default: true
+    t.string "profile_type"
+    t.bigint "profile_id"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["profile_type", "profile_id"], name: "index_users_on_profile_type_and_profile_id"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["role"], name: "index_users_on_role"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree
-
-  add_foreign_key "companies", "users"
-  add_foreign_key "courses", "companies"
-  add_foreign_key "courses", "users"
-  add_foreign_key "users", "roles"
+  add_foreign_key "school_profiles", "addresses"
+  add_foreign_key "student_profiles", "addresses"
 end

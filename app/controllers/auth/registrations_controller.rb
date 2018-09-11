@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Auth
   class RegistrationsController < ::Devise::RegistrationsController
     include ApiResponder
@@ -7,15 +9,15 @@ module Auth
     end
 
     def sign_up_params
-      res = fix_nested_attributes(params.require(:user).permit(
-        :email, :password, :first_name, :last_name, :avatar, :role
-        profile: [
-          :name, :phone, :web_site, :description,
-          address: [
-            :country, :region, :city, :street, :number, :postal_code
+      res = fix_nested_attributes(
+        params.require(:user).permit(
+          :email, :password, :first_name, :last_name, :avatar, :role,
+          profile: [
+            :name, :phone, :web_site, :description,
+            address: %i(country region city street number postal_code)
           ]
-        ]
-      ), :profile)
+        ), :profile
+      )
 
       res
     end

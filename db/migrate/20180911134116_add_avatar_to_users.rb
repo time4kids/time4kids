@@ -1,4 +1,6 @@
-class AddAvatarToUser < ActiveRecord::Migration[5.2]
+# frozen_string_literal: true
+
+class AddAvatarToUsers < ActiveRecord::Migration[5.2]
   def up
     add_attachment :users, :avatar
   end
