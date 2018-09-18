@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 USER = {
   id: :integer,
   role: :string,
@@ -7,7 +9,7 @@ USER = {
   avatar: :string,
   gender: :string_or_null,
   is_active: :boolean
-}
+}.freeze
 
 SCHOOL_PROFILE = {
   # address: ADDRESS,
@@ -18,7 +20,15 @@ SCHOOL_PROFILE = {
   description: :string
 }.freeze
 
+STUDENT_PROFILE = {
+  # address: ADDRESS,
+  id: :integer,
+  phone: :string_or_null,
+  age: :integer_or_null
+}.freeze
+
 SCHOOL = USER.merge(profile: SCHOOL_PROFILE)
+STUDENT = USER.merge(profile: STUDENT_PROFILE)
 
 ADDRESS = {
   country: :string,

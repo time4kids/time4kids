@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 TEST_VALUE = 'TEST_VALUE'
 MODIFIED = 'MODIFIED'
 VERSION = :v1
@@ -18,7 +20,7 @@ def result
 end
 
 def auth_for(user)
-  @auth_header = { Authorization: "Bearer #{Warden::JWTAuth::UserEncoder.new.call(user, :user)}" }
+  @auth_header = { Authorization: "Bearer #{Warden::JWTAuth::UserEncoder.new.call(user, :user, user.role)}" }
 end
 
 def with_auth(expect_200: true, expect_401: true)

@@ -32,14 +32,14 @@ describe '/auth (school)' do
       expect_json('error.message', "Email can't be blank")
     end
 
-    # it 'fails for existing Email' do
-    #   @new_school[:email] = User.patients.first.email
+    it 'fails for existing Email' do
+      @new_school[:email] = User.schools.first.email
 
-    #   post '/v1/auth/register', params: { user: @new_school }
+      post '/v1/auth/register', params: { user: @new_school }
 
-    #   expect_status(422)
-    #   expect_json_types('error', message: :string)
-    # end
+      expect_status(422)
+      expect_json_types('error', message: :string)
+    end
 
     it 'passes for correct new school' do
       post '/v1/auth/register', params: { user: @new_school }
@@ -68,6 +68,46 @@ describe '/auth (school)' do
 
       expect_status(422)
       expect_json_types('error', message: :string)
+    end
+
+    it 'passes for missing profile data' do
+      @new_school[:avatar] = nil
+      post '/v1/auth/register', params: { user: @new_school.except(:profile) }
+      expect_status(201)
+
+      expect_json_types(token: :string, user: USER)
+
+      user = JSON.parse(response.body)['user']
+      expect(user['profile']).to be_nil
+    end
+  end
+
+  describe 'PUT /register' do
+    before do
+      @current_user = User.find_by_email('incomplete@example.com')
+      auth_for(@current_user)
+    end
+
+    it 'update school profile' do
+      updates = {
+        first_name: 'MODIFIED',
+        profile: {
+          name: 'Complete profile',
+          phone: Faker::PhoneNumber.cell_phone,
+          website: 'http://blabla.com',
+          description: Faker::Lorem.paragraph
+        }
+      }
+
+      expect(@current_user.profile).to be_nil
+
+      with_auth { |args| put '/v1/auth/register', args.merge(params: { user: updates }) }
+
+      expect(@current_user.reload.profile).to_not be_nil
+
+      expect_json_scheme('user', SCHOOL)
+      # expect_json(user: updates.deep_merge({ profile: { gender: unmodified_gender } }))
+      expect_json_scheme('user.profile.*', SCHOOL_PROFILE)
     end
   end
 end

@@ -7,7 +7,7 @@ class User < ::ApplicationRecord
     ROLES.each { |role| alias_method role.to_s.pluralize, role }
   end
 
-  belongs_to :profile, polymorphic: true, optional: true
+  belongs_to :profile, polymorphic: true, optional: true, touch: true
   accepts_nested_attributes_for :profile
 
   validates :role, presence: true
