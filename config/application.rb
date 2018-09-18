@@ -33,5 +33,7 @@ module Time4kidsApi
     config.generators do |generate|
       generate.test_framework :rspec, fixture: true
     end
+
+    config.session_store :disabled
   end
 end

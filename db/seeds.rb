@@ -22,6 +22,8 @@ unless Rails.env.production?
       role: :student,
       first_name: Faker::Name.first_name,
       last_name: Faker::Name.last_name,
+      is_active: true,
+      confirmed_at: Time.current - 2.days,
       profile_attributes: {
         gender: 'm',
         # address: 'MyString',
@@ -30,6 +32,22 @@ unless Rails.env.production?
       }
     }
   end
+
+  students_data << [{
+    email: 'incompletestudent@example.com',
+    password: 'p@ssword',
+    role: :student,
+    first_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name,
+    confirmed_at: Time.current - 2.days,
+  }, {
+    email: 'unconfirmedstudent@example.com',
+    password: 'p@ssword',
+    role: :student,
+    first_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name
+  }]
+
   User.create!(students_data)
 
   schools_data = schools_amount.times.map do |school_id|
@@ -42,6 +60,8 @@ unless Rails.env.production?
       role: :school,
       first_name: "#{first_name} {demo}",
       last_name: last_name,
+      is_active: true,
+      confirmed_at: Time.current - 2.days,
       profile_attributes: {
         name: company_name,
         phone: Faker::PhoneNumber.cell_phone,
@@ -53,13 +73,21 @@ unless Rails.env.production?
     school
   end
 
-  schools_data << {
+  schools_data << [{
     email: 'incomplete@example.com',
     password: 'p@ssword',
     role: :school,
     first_name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name,
+    confirmed_at: Time.current - 2.days,
+    is_active: true
+  }, {
+    email: 'unconfirmedschool@example.com',
+    password: 'p@ssword',
+    role: :student,
+    first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name
-  }
+  }]
 
   User.create!(schools_data)
 

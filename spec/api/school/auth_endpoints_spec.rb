@@ -83,31 +83,56 @@ describe '/auth (school)' do
   end
 
   describe 'PUT /register' do
-    before do
-      @current_user = User.find_by_email('incomplete@example.com')
-      auth_for(@current_user)
+    context 'confirmed school' do
+      before do
+        @current_user = User.find_by_email('incomplete@example.com')
+        auth_for(@current_user)
+      end
+
+      it 'should update school profile' do
+        updates = {
+          first_name: 'MODIFIED',
+          profile: {
+            name: 'Complete profile',
+            phone: Faker::PhoneNumber.cell_phone,
+            website: 'http://blabla.com',
+            description: Faker::Lorem.paragraph
+          }
+        }
+
+        expect(@current_user.profile).to be_nil
+
+        with_auth(expect_200: false) { |args|
+          put '/v1/auth/register', args.merge(params: { user: updates })
+        }
+
+        expect(response.status).to be 204
+        expect(@current_user.reload.profile).to_not be_nil
+      end
     end
 
-    it 'update school profile' do
-      updates = {
-        first_name: 'MODIFIED',
-        profile: {
-          name: 'Complete profile',
-          phone: Faker::PhoneNumber.cell_phone,
-          website: 'http://blabla.com',
-          description: Faker::Lorem.paragraph
+    context 'unconfirmed school' do
+      before do
+        @current_user = User.find_by_email('unconfirmedschool@example.com')
+        auth_for(@current_user)
+      end
+
+      it 'should fail update school profile' do
+        updates = {
+          first_name: 'MODIFIED',
+          profile: {
+            gender: 'f',
+            phone: Faker::PhoneNumber.cell_phone,
+            age: 32
+          }
         }
-      }
 
-      expect(@current_user.profile).to be_nil
+        with_auth(expect_200: false) { |args|
+          put '/v1/auth/register', args.merge(params: { user: updates })
+        }
 
-      with_auth { |args| put '/v1/auth/register', args.merge(params: { user: updates }) }
-
-      expect(@current_user.reload.profile).to_not be_nil
-
-      expect_json_scheme('user', SCHOOL)
-      # expect_json(user: updates.deep_merge({ profile: { gender: unmodified_gender } }))
-      expect_json_scheme('user.profile.*', SCHOOL_PROFILE)
+        expect(response.status).to be 401
+      end
     end
   end
 end

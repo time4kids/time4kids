@@ -21,5 +21,24 @@ module Auth
 
       res
     end
+
+    def account_update_params
+      res = fix_nested_attributes(
+        params.require(:user).permit(
+          :email, :password, :password_confirmation, :current_password,
+          :first_name, :last_name, :avatar,
+          profile: [
+            :name, :phone, :web_site, :description,
+            address: %i(country region city street number postal_code)
+          ]
+        ), :profile, :address
+      )
+
+      res
+    end
+
+    def update_resource(resource, params)
+      resource.update_without_password(params)
+    end
   end
 end

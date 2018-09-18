@@ -14,7 +14,7 @@ class User < ::ApplicationRecord
   validates :email, presence: true, uniqueness: true
 
   devise :database_authenticatable, :registerable, :trackable, :validatable,
-    :jwt_authenticatable, jwt_revocation_strategy: JWTBlacklist
+    :confirmable, :jwt_authenticatable, jwt_revocation_strategy: JWTBlacklist
 
   has_attached_file :avatar,
     styles: {

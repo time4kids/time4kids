@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'devise/jwt/test_helpers'
 
 TEST_VALUE = 'TEST_VALUE'
 MODIFIED = 'MODIFIED'
@@ -20,7 +21,9 @@ def result
 end
 
 def auth_for(user)
-  @auth_header = { Authorization: "Bearer #{Warden::JWTAuth::UserEncoder.new.call(user, :user, user.role)}" }
+  headers = { 'Accept' => 'application/json', 'Content_Type' => 'application/json' }
+  # This will add a valid token for `user` in the `Authorization` header
+  @auth_header = Devise::JWT::TestHelpers.auth_headers(headers, user)
 end
 
 def with_auth(expect_200: true, expect_401: true)
