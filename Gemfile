@@ -54,6 +54,7 @@ group :test do
   gem 'airborne'
   gem 'database_cleaner'
   gem 'rspec-rails', '~> 3.5'
+  gem 'faker', :git => 'https://github.com/stympy/faker.git', :branch => 'master'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
