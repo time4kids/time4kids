@@ -9,7 +9,6 @@
 
 # Ignore all logfiles and tempfiles.
 /log/*
-/tmp/*
 !/log/.keep
 !/tmp/.keep
 
@@ -17,3 +16,31 @@
 /yarn-error.log
 
 .byebug_history
+!.keep
+*.DS_Store
+/.sass-cache/
+/.capistrano
+/coverage/
+public/system
+rerun.txt
+/tmp/*
+/tmp/**/*
+.gems
+.rbenv-gemsets
+/.pry_history
+/.env
+/Guardfile.private
+/vendor/ruby/
+/vendor/gems/
+/public/uploads
+/public/assets
+.idea
+dump.rdb
+.powrc
+.rvmrc
+*.sublime-project
+*.sublime-workspace
+.vscode
+site.retry
+custom_plan.rb
+zeus.json
