@@ -16,7 +16,7 @@ module Auth
             :name, :phone, :web_site, :description,
             address: %i(country region city street number postal_code)
           ]
-        ), :profile, :address
+        ), :profile, 'profile.address'
       )
 
       res
@@ -31,7 +31,7 @@ module Auth
             :name, :phone, :web_site, :description,
             address: %i(country region city street number postal_code)
           ]
-        ), :profile, :address
+        ), :profile, 'profile.address'
       )
 
       res

@@ -4,6 +4,16 @@ require 'rails_helper'
 
 describe '/auth (school)' do
   let(:avatar) { fixture_file_upload('valid_image.jpeg', 'image/jpeg') }
+  let(:address) {
+    {
+      country: Faker::Address.country,
+      region: Faker::Address.state,
+      city: Faker::Address.city,
+      street: Faker::Address.street_name,
+      number: Faker::Address.building_number,
+      postal_code: Faker::Address.postcode
+    }
+  }
 
   describe 'POST /register' do
     before do
@@ -19,7 +29,8 @@ describe '/auth (school)' do
           name: 'Test school 1',
           phone: Faker::PhoneNumber.cell_phone,
           website: 'http://blabla.com',
-          description: Faker::Lorem.paragraph
+          description: Faker::Lorem.paragraph,
+          address: address
         }
       }
     end
@@ -43,8 +54,10 @@ describe '/auth (school)' do
 
     it 'passes for correct new school' do
       post '/v1/auth/register', params: { user: @new_school }
+
       expect_status(201)
       expect_json_types(token: :string, user: SCHOOL)
+      expect_json_types('user.profile.addressable.*', ADDRESS)
 
       user = JSON.parse(response.body)['user']
       expect(user['avatar']).to_not be_empty
@@ -54,11 +67,21 @@ describe '/auth (school)' do
       @new_school[:avatar] = nil
       post '/v1/auth/register', params: { user: @new_school }
       expect_status(201)
-
       expect_json_types(token: :string, user: SCHOOL)
 
       user = JSON.parse(response.body)['user']
       expect(user['avatar']).to be_empty
+    end
+
+    it 'passes for missing address' do
+      @new_school[:profile][:address] = nil
+      post '/v1/auth/register', params: { user: @new_school }
+
+      expect_status(201)
+      expect_json_types(token: :string, user: SCHOOL)
+
+      user = JSON.parse(response.body)['user']
+      expect(user['profile']['addressabe']).to be_nil
     end
 
     it 'returns correct error for invalid avatar' do
@@ -96,7 +119,8 @@ describe '/auth (school)' do
             name: 'Complete profile',
             phone: Faker::PhoneNumber.cell_phone,
             website: 'http://blabla.com',
-            description: Faker::Lorem.paragraph
+            description: Faker::Lorem.paragraph,
+            address: address
           }
         }
 

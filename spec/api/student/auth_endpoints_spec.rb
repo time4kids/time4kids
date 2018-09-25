@@ -4,6 +4,16 @@ require 'rails_helper'
 
 describe '/auth (student)' do
   let(:avatar) { fixture_file_upload('valid_image.jpeg', 'image/jpeg') }
+  let(:address) {
+    {
+      country: Faker::Address.country,
+      region: Faker::Address.state,
+      city: Faker::Address.city,
+      street: Faker::Address.street_name,
+      number: Faker::Address.building_number,
+      postal_code: Faker::Address.postcode
+    }
+  }
 
   describe 'POST /register' do
     before do
@@ -18,7 +28,8 @@ describe '/auth (student)' do
         profile: {
           phone: Faker::PhoneNumber.cell_phone,
           address: Faker::Address.full_address,
-          age: 16
+          age: 16,
+          address: address
         }
       }
     end
@@ -44,8 +55,10 @@ describe '/auth (student)' do
 
     it 'passes for correct new student' do
       post '/v1/auth/register', params: { user: @new_student }
+
       expect_status(201)
       expect_json_types(token: :string, user: STUDENT)
+      expect_json_types('user.profile.addressabe', ADDRESS)
 
       user = JSON.parse(response.body)['user']
       expect(user['avatar']).to_not be_empty
@@ -62,6 +75,17 @@ describe '/auth (student)' do
       user = JSON.parse(response.body)['user']
       expect(user['avatar']).to be_empty
       expect(ActionMailer::Base.deliveries).to_not be_empty
+    end
+
+    it 'passes for missing address' do
+      @new_student[:profile][:address] = nil
+      post '/v1/auth/register', params: { user: @new_student }
+
+      expect_status(201)
+      expect_json_types(token: :string, user: STUDENT)
+
+      user = JSON.parse(response.body)['user']
+      expect(user['profile']['addressabe']).to be_nil
     end
 
     it 'returns correct error for invalid avatar' do
@@ -101,7 +125,8 @@ describe '/auth (student)' do
           profile: {
             gender: 'f',
             phone: Faker::PhoneNumber.cell_phone,
-            age: 32
+            age: 32,
+            address: address
           }
         }
 
