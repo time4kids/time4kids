@@ -75,6 +75,7 @@ describe '/auth (student)' do
       user = JSON.parse(response.body)['user']
       expect(user['avatar']).to be_empty
       expect(ActionMailer::Base.deliveries).to_not be_empty
+      expect(user['profile']['addressabe']['lat']).to_not be_nil
     end
 
     it 'passes for missing address' do
@@ -162,6 +163,32 @@ describe '/auth (student)' do
         }
 
         expect(response.status).to be 401
+      end
+    end
+
+    context 'geolocation coordinates' do
+      before do
+        @current_user = User.first
+        auth_for(@current_user)
+      end
+
+      it 'should update geolocation coordinates' do
+        updates = {
+          profile: {
+            address: address
+          }
+        }
+
+        old_address = @current_user.profile.address
+        full_address = Address.new(address).full_address
+        stub_gecoding(full_address)
+
+        with_auth(expect_200: false) { |args|
+          put '/v1/auth/register', args.merge(params: { user: updates })
+        }
+
+        expect(response.status).to be 204
+        expect(@current_user.reload.profile.address.long).to_not eql(old_address.long)
       end
     end
   end
