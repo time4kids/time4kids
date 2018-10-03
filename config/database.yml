@@ -82,4 +82,4 @@ production:
   <<: *default
   database: time4kids-api_production
   username: time4kids-api
-  password: <%= ENV['TIME4KIDS-API_DATABASE_PASSWORD'] %>
+  password: <%= ENV['TIME4KIDS_API_DATABASE_PASSWORD'] %>

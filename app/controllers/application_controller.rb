@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::API
   private
 
   def fix_nested_attributes(params, *keys)
-    paths = keys.map{ |k| k.to_s.split('.') }.sort_by{ |a| -a.length }
+    paths = keys.map { |k| k.to_s.split('.') }.sort_by { |a| -a.length }
 
     paths.each do |path|
       if params.dig(*path)

@@ -8,7 +8,7 @@ class CreateAddresses < ActiveRecord::Migration[5.2]
       t.string :city, null: false
       t.string :street, null: false
       t.string :number, null: true
-      t.integer :postal_code, null: true
+      t.string :postal_code, null: true
       t.float :lat, null: true, limit: 30
       t.float :long, null: true, limit: 30
     end

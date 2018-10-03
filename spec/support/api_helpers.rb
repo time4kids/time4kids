@@ -57,3 +57,13 @@ def expect_success_with_id
   expect_json(success: true)
   expect_json_types(id: :integer)
 end
+
+def stub_gecoding(address)
+  Geocoder::Lookup::Test.add_stub(
+    address, [
+      {
+        'coordinates'  => [Faker::Address.latitude, Faker::Address.longitude],
+      }
+    ]
+  )
+end

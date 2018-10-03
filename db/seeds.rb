@@ -26,9 +26,16 @@ unless Rails.env.production?
       confirmed_at: Time.current - 2.days,
       profile_attributes: {
         gender: 'm',
-        # address: 'MyString',
         phone: Faker::PhoneNumber.cell_phone,
-        age: "2#{student_id}"
+        age: "2#{student_id}",
+        address_attributes: {
+          country: Faker::Address.country,
+          region: Faker::Address.state,
+          city: Faker::Address.city,
+          street: Faker::Address.street_name,
+          number: Faker::Address.building_number,
+          postal_code: Faker::Address.postcode
+        }
       }
     }
   end
@@ -66,7 +73,15 @@ unless Rails.env.production?
         name: company_name,
         phone: Faker::PhoneNumber.cell_phone,
         website: "https://#{company_name}.com",
-        description: Faker::Lorem.paragraph
+        description: Faker::Lorem.paragraph,
+        addresses_attributes: [{
+          country: Faker::Address.country,
+          region: Faker::Address.state,
+          city: Faker::Address.city,
+          street: Faker::Address.street_name,
+          number: Faker::Address.building_number,
+          postal_code: Faker::Address.postcode
+        }]
       }
     }
 

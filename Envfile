@@ -1,0 +1,17 @@
+# A sample Envfile
+# enable_defaults! { ENV['RACK_ENV'] != 'production' }
+
+# variable :REDIS_URL, :string, default: 'redis://localhost:6379'
+#
+# group :production do
+#   variable :SECRET_KEY_BASE
+# end
+variable :SMTP_USERNAME, :string
+variable :SMTP_PASSWORD, :string
+variable :SECRET_KEY_BASE, :string
+variable :REDIS_HOST, :string
+variable :REDIS_PORT, :integer
+
+group :production do
+  variable :TIME4KIDS_API_DATABASE_PASSWORD, :string
+end
