@@ -3,6 +3,7 @@
 class SchoolProfile < ApplicationRecord
   has_one :user, as: :profile, dependent: :delete
   has_many :addresses, as: :addressable, dependent: :delete_all
+  has_and_belongs_to_many :categories, optional: true
 
   accepts_nested_attributes_for :addresses
 
