@@ -27,7 +27,6 @@ describe '/auth (student)' do
         role: 'student',
         profile: {
           phone: Faker::PhoneNumber.cell_phone,
-          address: Faker::Address.full_address,
           age: 16,
           address: address
         }
@@ -113,7 +112,6 @@ describe '/auth (student)' do
   end
 
   describe 'PUT /register' do
-
     context 'confirmed user' do
       before do
         @current_user = User.find_by_email('incompletestudent@example.com')

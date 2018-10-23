@@ -2,7 +2,7 @@
 
 class StudentProfile < ApplicationRecord
   has_one :user, as: :profile, dependent: :delete
-  has_one :address, as: :addressable, dependent: :delete
+  has_one :address, as: :addressable, dependent: :delete, inverse_of: :addressable
 
   accepts_nested_attributes_for :address
 

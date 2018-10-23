@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe '/auth (school)' do
   let(:avatar) { fixture_file_upload('valid_image.jpeg', 'image/jpeg') }
-  let(:address) {
+  let(:address) do
     {
       country: Faker::Address.country,
       region: Faker::Address.state,
@@ -13,7 +13,9 @@ describe '/auth (school)' do
       number: Faker::Address.building_number,
       postal_code: Faker::Address.postcode
     }
-  }
+  end
+
+  let(:categories) { Category.all.limit(2)}
 
   describe 'POST /register' do
     before do
@@ -55,12 +57,14 @@ describe '/auth (school)' do
     it 'passes for correct new school' do
       post '/v1/auth/register', params: { user: @new_school }
 
+      user = JSON.parse(response.body)['user']
+
       expect_status(201)
       expect_json_types(token: :string, user: SCHOOL)
       expect_json_types('user.profile.addressable.*', ADDRESS)
 
-      user = JSON.parse(response.body)['user']
       expect(user['avatar']).to_not be_empty
+      expect(user['profile']['addressable']).to_not be_empty
     end
 
     it 'passes for missing avatar' do
@@ -133,6 +137,108 @@ describe '/auth (school)' do
         expect(response.status).to be 204
         expect(@current_user.reload.profile).to_not be_nil
       end
+
+      it 'should update categories' do
+        updates = {
+          first_name: 'MODIFIED',
+          profile: {
+            name: 'Complete profile',
+            phone: Faker::PhoneNumber.cell_phone,
+            website: 'http://blabla.com',
+            description: Faker::Lorem.paragraph,
+            address: address,
+            category_ids: categories.pluck(:id)
+          }
+        }
+
+        expect(@current_user.profile).to be_nil
+        with_auth(expect_200: false) { |args|
+          put '/v1/auth/register', args.merge(params: { user: updates })
+        }
+
+        expect(response.status).to be 204
+        expect(@current_user.reload.profile.categories).to match_array(categories)
+      end
+
+      it 'should fail without name' do
+        updates = {
+          profile: {
+            name: '',
+            phone: Faker::PhoneNumber.cell_phone,
+            website: 'http://blabla.com',
+            description: Faker::Lorem.paragraph,
+            address: address,
+            category_ids: categories.pluck(:id)
+          }
+        }
+
+        with_auth(expect_200: false) { |args|
+          put '/v1/auth/register', args.merge(params: { user: updates })
+        }
+
+        expect(response.status).to be 422
+      end
+
+      it 'should fail without phone number' do
+        updates = {
+          profile: {
+            name: 'Complete profile',
+            phone: '',
+            website: 'http://blabla.com',
+            description: Faker::Lorem.paragraph,
+            address: address,
+            category_ids: categories.pluck(:id)
+          }
+        }
+
+        with_auth(expect_200: false) { |args|
+          put '/v1/auth/register', args.merge(params: { user: updates })
+        }
+
+        expect(response.status).to be 422
+      end
+
+      it 'should fail with invalid address' do
+        updates = {
+          profile: {
+            name: 'Complete profile',
+            phone: Faker::PhoneNumber.cell_phone,
+            website: 'http://blabla.com',
+            description: Faker::Lorem.paragraph,
+            category_ids: categories.pluck(:id),
+            address: {
+              street: Faker::Address.street_name,
+              number: Faker::Address.building_number,
+              postal_code: Faker::Address.postcode
+            },
+          }
+        }
+
+        with_auth(expect_200: false) { |args|
+          put '/v1/auth/register', args.merge(params: { user: updates })
+        }
+
+        expect(response.status).to be 422
+      end
+
+      it 'should fail without address' do
+        updates = {
+          first_name: 'MODIFIED',
+          profile: {
+            name: 'Complete profile',
+            phone: Faker::PhoneNumber.cell_phone,
+            website: 'http://blabla.com',
+            description: Faker::Lorem.paragraph,
+            category_ids: categories.pluck(:id),
+          }
+        }
+
+        with_auth(expect_200: false) { |args|
+          put '/v1/auth/register', args.merge(params: { user: updates })
+        }
+
+        expect(response.status).to be 422
+      end
     end
 
     context 'unconfirmed school' do
@@ -145,9 +251,12 @@ describe '/auth (school)' do
         updates = {
           first_name: 'MODIFIED',
           profile: {
-            gender: 'f',
+            name: 'Complete profile',
             phone: Faker::PhoneNumber.cell_phone,
-            age: 32
+            website: 'http://blabla.com',
+            description: Faker::Lorem.paragraph,
+            address: address,
+            category_ids: categories.pluck(:id)
           }
         }
 

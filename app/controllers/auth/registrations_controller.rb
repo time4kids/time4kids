@@ -13,7 +13,7 @@ module Auth
         params.require(:user).permit(
           :email, :password, :first_name, :last_name, :avatar, :role,
           profile: [
-            :name, :phone, :web_site, :description,
+            :name, :phone, :website, :description, category_ids: [],
             address: %i(country region city street number postal_code)
           ]
         ), :profile, 'profile.address'
@@ -28,12 +28,11 @@ module Auth
           :email, :password, :password_confirmation, :current_password,
           :first_name, :last_name, :avatar,
           profile: [
-            :name, :phone, :web_site, :description,
+            :name, :phone, :website, :description, category_ids: [],
             address: %i(country region city street number postal_code)
           ]
         ), :profile, 'profile.address'
       )
-
       res
     end
 

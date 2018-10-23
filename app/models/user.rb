@@ -16,6 +16,8 @@ class User < ::ApplicationRecord
   devise :database_authenticatable, :registerable, :trackable, :validatable,
     :confirmable, :jwt_authenticatable, jwt_revocation_strategy: JWTBlacklist
 
+  # validates :profile, presence: true, if: -> { new_record? }
+
   has_attached_file :avatar,
     styles: {
       original: '750x>'

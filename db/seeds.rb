@@ -12,8 +12,17 @@ names = %q(
   Lorenzo Frank, Penelope Shaw, Stephanie Norman, Baylee Mckee, Kaleigh Washington, Makayla Schroeder, Audrina Colon
 ).squish.split(', ')
 
+categories = %w(Wakeboarding Waltz Water_sports Web_design dance Windsurfing sports Woodwork Workout Wrestling Writing Yoga Zouk Zumba)
+
 unless Rails.env.production?
   puts 'Creating seeds...'
+
+  categories_data = categories.reduce([]) do |memo, category|
+    memo << { name: category, description: Faker::Lorem.sentence }
+    memo
+  end
+
+  Category.create!(categories_data)
 
   students_data = 3.times.map do |student_id|
     {

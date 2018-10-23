@@ -5,6 +5,8 @@ class Address < ApplicationRecord
 
   belongs_to :addressable, polymorphic: true, optional: true
 
+  validates :country, :city, presence: true, allow_blank: false
+
   after_validation :geocode, if: ->(obj) { obj.full_address.present? and obj.changed? }
 
   api_accessible :v1_default do |t|
